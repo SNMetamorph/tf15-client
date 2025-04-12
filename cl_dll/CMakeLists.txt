@@ -146,7 +146,8 @@ set(CLDLL_SOURCES
 
 include_directories(. hl/ ../dlls ../dlls/tfc ../common ../engine ../pm_shared ../game_shared ../public ../3rdparty/vgui_dll/include)
 
-if(ANDROID)
+#if(ANDROID OR VITA)
+if(TRUE)
 	add_library(${CLDLL_LIBRARY} MODULE ${CLDLL_SOURCES} $<TARGET_OBJECTS:vgui_support>)
 else()
 	add_library(${CLDLL_LIBRARY} MODULE ${CLDLL_SOURCES})
@@ -161,7 +162,11 @@ if(WIN32)
 endif()
 
 if(BUILD_VGUI)
-	target_link_libraries(${CLDLL_LIBRARY} vgui)
+	if(VITA)
+		target_link_libraries(${CLDLL_LIBRARY} -Wl,--whole-archive vgui -Wl,--no-whole-archive)
+	else()
+		target_link_libraries(${CLDLL_LIBRARY} vgui)
+	endif()
 endif()
 
 set_target_postfix(${CLDLL_LIBRARY})
