@@ -96,9 +96,10 @@ endif()
 
 if(BUILD_VGUI)
 	add_subdirectory(3rdparty/vgui_dll)
-	if(ANDROID)
-		set(XASH_SDK ${CMAKE_CURRENT_SOURCE_DIR})
-		add_subdirectory(3rdparty/vgui_support)
+	#if(ANDROID)
+	if(TRUE)
+		#set(XASH_SDK ${CMAKE_CURRENT_SOURCE_DIR})
+		#add_subdirectory(3rdparty/vgui_support)
 	endif()
 endif()
 

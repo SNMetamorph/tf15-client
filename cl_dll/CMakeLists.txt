@@ -26,6 +26,8 @@ project(client)
 set(CLDLL_LIBRARY client)
 
 include(CheckIncludeFile)
+include(CompilerRuntime)
+
 check_include_file("tgmath.h" HAVE_TGMATH_H)
 if(HAVE_TGMATH_H)
 	add_definitions(-DHAVE_TGMATH_H)
@@ -146,8 +148,11 @@ set(CLDLL_SOURCES
 
 include_directories(. hl/ ../dlls ../dlls/tfc ../common ../engine ../pm_shared ../game_shared ../public ../3rdparty/vgui_dll/include)
 
-if(ANDROID)
-	add_library(${CLDLL_LIBRARY} MODULE ${CLDLL_SOURCES} $<TARGET_OBJECTS:vgui_support>)
+#if(ANDROID)
+if(TRUE)
+	file(GLOB_RECURSE VGUI_SUPPORT_SRC "../3rdparty/vgui_support/*.cpp")
+	list(APPEND CLDLL_SOURCES ${VGUI_SUPPORT_SRC})
+	add_library(${CLDLL_LIBRARY} MODULE ${CLDLL_SOURCES})
 else()
 	add_library(${CLDLL_LIBRARY} MODULE ${CLDLL_SOURCES})
 endif()
@@ -165,6 +170,10 @@ if(BUILD_VGUI)
 endif()
 
 set_target_postfix(${CLDLL_LIBRARY})
+set_compiler_runtime(${CLDLL_LIBRARY} STATIC)
+set_target_properties(${CLDLL_LIBRARY} PROPERTIES
+	POSITION_INDEPENDENT_CODE 1
+)
 
 install(TARGETS ${CLDLL_LIBRARY}
         DESTINATION "${GAME_DIR}/${CLIENT_INSTALL_DIR}/"
